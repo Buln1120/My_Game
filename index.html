@@ -88,9 +88,9 @@ const PLATFORMS = [
 ];
 
 const SPIKES = [
-  {x:380, y:GROUND_Y-20, w:80, h:20},
-  {x:780, y:GROUND_Y-20, w:100, h:20},
-  {x:1100,y:GROUND_Y-20, w:80, h:20},
+  {x:150, y:GROUND_Y-20, w:60, h:20},
+  {x:420, y:GROUND_Y-20, w:80, h:20},
+  {x:950, y:GROUND_Y-20, w:80, h:20},
 ];
 
 const COINS = [
@@ -224,6 +224,7 @@ function update() {
   if (player.x > LEVEL_W - CHAR_W) player.x = LEVEL_W - CHAR_W;
 
   /* ---- 碰撞（先Y后X，防止隧道效应） ---- */
+  const prevY = player.y - player.vy; // 用于单向平台判断
   player.onGround = false;
   const allSolids = [...GROUNDS, ...PLATFORMS];
 
@@ -231,6 +232,10 @@ function update() {
   for (const s of allSolids) {
     if (player.x+CHAR_W <= s.x || player.x >= s.x+s.w) continue; // X轴未对齐
     if (player.y+CHAR_H <= s.y || player.y >= s.y+s.h) continue; // Y轴未重叠
+
+    // 平台单向碰撞：只有从上往下落时才站上去
+    if (s.type === 'platform' && prevY + CHAR_H > s.y + 4) continue;
+
     // 重叠了——判断方向
     if (player.vy >= 0) { // 下落→站上去
       player.y = s.y - CHAR_H;
