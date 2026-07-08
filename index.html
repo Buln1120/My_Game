@@ -339,7 +339,12 @@ function draw() {
   for (const g of GROUNDS) {
     ctx.fillStyle = '#6b8e23'; ctx.fillRect(g.x, g.y, g.w, g.h);
     ctx.fillStyle = '#556b2f'; ctx.fillRect(g.x, g.y, g.w, 8);
+    // 碰撞框（调试）
+    ctx.strokeStyle = '#f00'; ctx.lineWidth=1; ctx.strokeRect(g.x,g.y,g.w,g.h);
   }
+  // 玩家碰撞框（调试）
+  ctx.strokeStyle = '#0f0'; ctx.lineWidth=2;
+  ctx.strokeRect(player.x, player.y, CHAR_W, CHAR_H);
 
   /* ---- 平台 ---- */
   for (const p of PLATFORMS) {
