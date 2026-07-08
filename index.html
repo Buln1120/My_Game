@@ -252,18 +252,21 @@ function update() {
     else if (player.vx < 0) player.x = s.x + s.w;
   }
 
+  /* ---- 记录安全位置 ---- */
+  if (player.onGround) { lastSafeX = player.x; lastSafeY = player.y; }
+
   /* ---- 尖刺 ---- */
   for (const s of SPIKES) {
     if (pcx + 6 > s.x && pcx - 6 < s.x + s.w &&
         player.y + CHAR_H > s.y && player.y < s.y + s.h &&
         invincibleTimer <= 0) {
-      die();
+      die(false);
       break;
     }
   }
 
   /* ---- 掉出屏幕 ---- */
-  if (player.y > CANVAS_H + 80 && invincibleTimer <= 0) die();
+  if (player.y > CANVAS_H + 80 && invincibleTimer <= 0) die(true);
 
   /* ---- 金币 ---- */
   for (let i = COINS.length-1; i >= 0; i--) {
@@ -297,7 +300,35 @@ function update() {
   } catch(e) { window._lastError = e.message; }
 }
 
-function die() {
+let lastSafeX = 60, lastSafeY = GROUND_Y - CHAR_H - 10;
+
+function die(fromFall) {
+  if (gameState !== 'playing') return;
+  lives--; deaths++;
+  spawnParticles(player.x+CHAR_W/2, player.y+CHAR_H/2, '#f44', 30);
+  document.getElementById('lives').textContent = lives;
+
+  if (lives <= 0) {
+    gameState = 'gameover';
+    showMsg('💀 生命耗尽！游戏重新开始...', false);
+    setTimeout(() => location.reload(), 2000);
+  } else {
+    // 原地复活 或 悬崖边复活
+    if (fromFall) {
+      player.x = lastSafeX;
+      player.y = lastSafeY;
+    } else {
+      player.y = lastSafeY;
+    }
+    player.vy = 0; player.vx = 0;
+    player.jumpsUsed = 0;
+    invincibleTimer = 120;
+    gameState = 'playing';
+    document.getElementById('msg').style.opacity = '1';
+    document.getElementById('msg').innerHTML = '💔 -1';
+    setTimeout(() => { document.getElementById('msg').style.opacity = '0'; }, 800);
+  }
+}
   if (gameState !== 'playing') return;
   lives--; deaths++;
   spawnParticles(player.x+CHAR_W/2, player.y+CHAR_H/2, '#f44', 30);
