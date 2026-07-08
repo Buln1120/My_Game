@@ -233,17 +233,17 @@ function update() {
     const sBottom = s.y + s.h, sTop = s.y;
     const prevBottom = pBottom - player.vy, prevTop = pTop - player.vy;
 
-    if (player.vy > 0 && prevBottom <= sTop + 2) { // 落在上面
+    if (player.vy > 0 && prevBottom < sBottom) { // 落在上面（防止隧道效应）
       player.y = s.y - CHAR_H;
       player.vy = 0;
       player.onGround = true;
       player.jumpsUsed = 0;
-    } else if (player.vy < 0 && prevTop >= sBottom - 2) { // 撞头
+    } else if (player.vy < 0 && prevTop > sTop) { // 撞头
       player.y = s.y + s.h;
       player.vy = 0;
-    } else if (player.vx > 0 && player.x + CHAR_W - player.vx <= s.x + 2) { // 右侧碰撞
+    } else if (player.vx > 0 && player.x < s.x) { // 右侧碰撞
       player.x = s.x - CHAR_W;
-    } else if (player.vx < 0 && player.x - player.vx >= s.x + s.w - 2) { // 左侧碰撞
+    } else if (player.vx < 0 && player.x > s.x + s.w - CHAR_W) { // 左侧碰撞
       player.x = s.x + s.w;
     }
   }
