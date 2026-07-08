@@ -479,10 +479,11 @@ function draw() {
 
   /* ---- 粒子 ---- */
   for (const p of particles) {
-    ctx.fillStyle = p.color; ctx.globalAlpha = p.life/40;
+    ctx.globalAlpha = p.life/40;
+    ctx.fillStyle = p.color;
     ctx.fillRect(p.x-cameraX-2, p.y-2, 4, 4);
+    ctx.globalAlpha = 1;
   }
-  ctx.globalAlpha = 1;
 
   ctx.restore();
 
