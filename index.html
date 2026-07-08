@@ -51,7 +51,7 @@ const ctx = canvas.getContext('2d');
 /* ============================================
  * 游戏状态
  * ============================================ */
-let player = { x:60, y:GROUND_Y-CHAR_H, vx:0, vy:0, onGround:false, jumpsUsed:0, maxJumps:2 };
+let player = { x:60, y:GROUND_Y-CHAR_H-10, vx:0, vy:0, onGround:false, jumpsUsed:0, maxJumps:2 };
 let cameraX = 0;
 let lives = 3, coinsCollected = 0, deaths = 0;
 let gameState = 'playing'; // playing | win | dead | gameover
@@ -301,7 +301,7 @@ function die() {
 }
 
 function respawn() {
-  player.x = 60; player.y = GROUND_Y - CHAR_H;
+  player.x = 60; player.y = GROUND_Y - CHAR_H - 10;
   player.vx = 0; player.vy = 0;
   player.jumpsUsed = 0;
   gameState = 'playing';
@@ -309,7 +309,7 @@ function respawn() {
 
 function resetLevel() {
   lives = 3; coinsCollected = 0; deaths = 0;
-  player.x = 60; player.y = GROUND_Y - CHAR_H;
+  player.x = 60; player.y = GROUND_Y - CHAR_H - 10;
   player.vx = 0; player.vy = 0; player.jumpsUsed = 0;
   gameState = 'playing';
   // 重置金币（简单重载）
