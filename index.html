@@ -54,7 +54,7 @@ const ctx = canvas.getContext('2d');
 let player = { x:60, y:GROUND_Y-CHAR_H-10, vx:0, vy:0, onGround:false, jumpsUsed:0, maxJumps:2 };
 let cameraX = 0;
 let lives = 3, coinsCollected = 0, deaths = 0;
-let gameState = 'playing'; // playing | win | dead | gameover
+let gameState = 'menu'; // menu | playing | win | gameover
 let deadTimer = 0, winTimer = 0;
 let particles = [];
 
@@ -141,6 +141,10 @@ function spawnParticles(x, y, color, count) {
  * 更新
  * ============================================ */
 function update() {
+  if (gameState === 'menu') {
+    if (keys['Enter']) { gameState = 'playing'; keys['Enter'] = false; }
+    return;
+  }
   if (gameState === 'win') { winTimer++; if (winTimer>120) return; }
   if (gameState === 'gameover') return;
 
@@ -343,6 +347,21 @@ function resetLevel() {
  * 渲染
  * ============================================ */
 function draw() {
+  // 开始画面
+  if (gameState === 'menu') {
+    ctx.fillStyle = '#1a1a2e'; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 36px -apple-system';
+    ctx.textAlign = 'center';
+    ctx.fillText('双人跑酷', CANVAS_W/2, 180);
+    ctx.font = '16px -apple-system'; ctx.fillStyle = '#aaa';
+    ctx.fillText('P1: A/D 移动 | P2: ↑ 跳跃', CANVAS_W/2, 230);
+    ctx.fillText('P1+2: 冲刺 & 二段跳', CANVAS_W/2, 255);
+    ctx.fillStyle = '#ff0'; ctx.font = 'bold 22px -apple-system';
+    ctx.fillText('按 ENTER 开始游戏', CANVAS_W/2, 320);
+    ctx.textAlign = 'left';
+    return;
+  }
+
   ctx.save();
   ctx.translate(-cameraX, 0);
 
