@@ -329,28 +329,6 @@ function die(fromFall) {
     setTimeout(() => { document.getElementById('msg').style.opacity = '0'; }, 800);
   }
 }
-  if (gameState !== 'playing') return;
-  lives--; deaths++;
-  spawnParticles(player.x+CHAR_W/2, player.y+CHAR_H/2, '#f44', 30);
-  document.getElementById('lives').textContent = lives;
-
-  if (lives <= 0) {
-    gameState = 'gameover';
-    showMsg('💀 生命耗尽！游戏重新开始...', false);
-    setTimeout(() => location.reload(), 2000);
-  } else {
-    // 原地复活：回到上方，2秒无敌+闪烁
-    player.y = GROUND_Y - CHAR_H - 20;
-    player.vy = 0;
-    player.vx = 0;
-    player.jumpsUsed = 0;
-    invincibleTimer = 120; // 2秒 @60fps
-    gameState = 'playing';
-    document.getElementById('msg').style.opacity = '1';
-    document.getElementById('msg').innerHTML = '💔 -1';
-    setTimeout(() => { document.getElementById('msg').style.opacity = '0'; }, 800);
-  }
-}
 
 function resetLevel() {
   lives = 3; coinsCollected = 0; deaths = 0;
