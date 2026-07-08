@@ -346,6 +346,7 @@ function resetLevel() {
  * 渲染
  * ============================================ */
 function draw() {
+  ctx.globalAlpha = 1; // 每帧强制重置，防闪现
   // 通关画面
   if (gameState === 'win') {
     ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
